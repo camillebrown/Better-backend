@@ -54,7 +54,7 @@ app.register_blueprint(workouts, url_prefix='/workouts')
 app.register_blueprint(moods, url_prefix='/moods')
 app.register_blueprint(sleeps, url_prefix='/sleeps')
 app.register_blueprint(meals, url_prefix='/meals')
-app.register_blueprint(settings, url_prefix='/settings')
+app.register_blueprint(settings, url_prefix='/profile')
 
 # The default URL ends in / ("my-website.com/").
 @app.route('/')

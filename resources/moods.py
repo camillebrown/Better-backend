@@ -6,10 +6,8 @@ moods = Blueprint("moods", "moods")
 
 @moods.route('/', methods=['GET'])
 def get_moods():
-    # find the workouts and change each one to a dictionary in a new array
     try:
         moods = [model_to_dict(workout) for workout in models.Mood.select()]
-        print(moods)
         return jsonify(data=moods, status={"code": 200, "message": "Successfully pulled all moods"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message":"Error getting the moods"})
@@ -17,11 +15,7 @@ def get_moods():
 @moods.route('/', methods=['POST'])
 def create_mood():
     payload = request.get_json()
-    print(type(payload), 'payload')
     mood = models.Mood.create(**payload)
-    print(mood.__dict__)
-    print(dir(mood))
-    print(model_to_dict(mood), 'model to dict')
     mood_dict = model_to_dict(mood)
     return jsonify(data=mood_dict, status={"code": 201, "message":"Successfully created a new mood log!"})
 

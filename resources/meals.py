@@ -8,7 +8,6 @@ meals = Blueprint("meals", "meals")
 def get_meals():
     try:
         meals = [model_to_dict(meal) for meal in models.Meal.select()]
-        print(meals)
         return jsonify(data=meals, status={"code": 200, "message": "Successfully pulled all meals"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message":"Error getting the meals"})
@@ -16,11 +15,7 @@ def get_meals():
 @meals.route('/', methods=['POST'])
 def create_meal():
     payload = request.get_json()
-    print(type(payload), 'payload')
     meal = models.Meal.create(**payload)
-    print(meal.__dict__)
-    print(dir(meal))
-    print(model_to_dict(meal), 'model to dict')
     meal_dict = model_to_dict(meal)
     return jsonify(data=meal_dict, status={"code": 201, "message":"Successfully created a new meal!"})
 

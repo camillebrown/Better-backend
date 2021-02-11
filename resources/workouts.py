@@ -13,7 +13,6 @@ def get_workouts():
     # find the workouts and change each one to a dictionary in a new array
     try:
         workouts = [model_to_dict(workout) for workout in models.Fitness.select()]
-        print(workouts)
         return jsonify(data=workouts, status={"code": 200, "message": "Successfully pulled all workouts"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message":"Error getting the workouts"})
@@ -21,11 +20,7 @@ def get_workouts():
 @workouts.route('/', methods=['POST'])
 def create_workout():
     payload = request.get_json()
-    print(type(payload), 'payload')
     workout = models.Fitness.create(**payload)
-    print(workout.__dict__)
-    print(dir(workout))
-    print(model_to_dict(workout), 'model to dict')
     workout_dict = model_to_dict(workout)
     return jsonify(data=workout_dict, status={"code": 201, "message":"Successfully created a new workout!"})
 
