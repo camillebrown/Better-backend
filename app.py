@@ -1,9 +1,14 @@
-from flask import Flask, jsonify, request, g
+from flask import Flask, g
 from flask_cors import CORS
 from flask_login import LoginManager
 
 import models
+from resources.users import users
 from resources.workouts import workouts
+from resources.moods import moods
+from resources.sleeps import sleeps
+from resources.meals import meals
+from resources.settings import settings
 
 DEBUG = True
 PORT = 8000
@@ -30,7 +35,7 @@ def load_user(user_id):
 @app.before_request
 def before_request():
     """Connect to the database before each request."""
-    g.db = models.DATABASE
+    g.db = models.DATABASE # MAKE SURE IT'S CAPS
     g.db.connect()
 
 @app.after_request
@@ -45,11 +50,16 @@ CORS(app,\
      support_credentials=True)
 
 app.register_blueprint(users, url_prefix='/api/v1/users')
-app.register_blueprint(workouts, url_prefix='/api/v1/workouts')
+app.register_blueprint(workouts, url_prefix='/workouts')
+app.register_blueprint(moods, url_prefix='/moods')
+app.register_blueprint(sleeps, url_prefix='/sleeps')
+app.register_blueprint(meals, url_prefix='/meals')
+app.register_blueprint(settings, url_prefix='/settings')
 
+# The default URL ends in / ("my-website.com/").
 @app.route('/')
 def index():
-    return 'HIIIIIII'
+    return 'hi'
 
 # Run the app when the program starts!
 if __name__ == '__main__':

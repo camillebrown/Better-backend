@@ -65,7 +65,7 @@ class PersonSetting(Model):
         database = DATABASE
 
 class Fitness(Model):
-    person = ForeignKeyField(Person, backref='workouts')
+    person=ForeignKeyField(Person, backref='workouts')
     #############MAKE THESE REQUIRED############
     exercise_name = CharField()
     calories = IntegerField()
