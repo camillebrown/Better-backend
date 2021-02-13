@@ -56,6 +56,10 @@ app.register_blueprint(sleeps, url_prefix='/sleeps')
 app.register_blueprint(meals, url_prefix='/meals')
 app.register_blueprint(settings, url_prefix='/profile')
 
+CORS(meals, 
+     origins=['http://localhost:3000'],\
+     support_credentials=True)
+
 # The default URL ends in / ("my-website.com/").
 @app.route('/')
 def index():

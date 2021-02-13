@@ -27,7 +27,7 @@ def register():
         user_dict = model_to_dict(user)
         del user_dict['password'] # Don't expose password!
 
-        return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered"})
+        return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered user"})
 
 @users.route('/login', methods=["POST"])
 def login():
@@ -37,8 +37,6 @@ def login():
     try:
         # see if user is registered
         user = models.Person.get(models.Person.email == payload['email'])
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        print(user)
 
         user_dict = model_to_dict(user)
 
@@ -46,7 +44,7 @@ def login():
         if(check_password_hash(user_dict['password'], payload['password'])):
             del user_dict['password'] # delete hashed pw, unnecessary & unsafe
             login_user(user) # start session
-            return jsonify(data=user_dict, status={"code": 200, "message": "Success"})
+            return jsonify(data=user_dict, status={"code": 200, "message": "Successfully logged in user"})
         else:
             return jsonify(data={}, status={"code": 401, "message": "Username or password is incorrect"})
     except models.DoesNotExist:
