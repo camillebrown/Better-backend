@@ -1,7 +1,8 @@
 from peewee import *
 from flask_login import UserMixin
-
 from datetime import date, datetime
+# from itsdangerous.serializer import Serializer
+
 
 DATABASE = PostgresqlDatabase('better_app', host='localhost', port=5432)
 
@@ -14,7 +15,8 @@ class Person(UserMixin, Model):
 
     class Meta:
         database = DATABASE
-
+        
+    
 class PersonSetting(Model):
     ACTIVE_STATUSES = (
         (0, "Mostly sedatary (less than 2 hrs a week)"),

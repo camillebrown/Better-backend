@@ -1,6 +1,7 @@
 import models
-from flask import Blueprint, jsonify, request
-from flask_login import login_required, current_user
+from flask import Blueprint, jsonify, request, session
+from flask_cors import CORS, cross_origin
+from flask_login import LoginManager,login_required, current_user
 from playhouse.shortcuts import model_to_dict
 
 settings = Blueprint("settings", "settings")
@@ -13,20 +14,19 @@ def create_new_setting():
     return jsonify(data=setting_dict, status={"code": 201, "message":"Successfully created settings for the user!"})
 
 @settings.route('/', methods=["GET"])
-@login_required
 def get_settings():
-    
     try:
-        setting = models.PersonSetting.get_by_id(1) \
-                  .join_from(models.PersonSetting, models.Person) \
-                  .where(models.Person.id == current_user.id)
-        setting_dict = model_to_dict(setting)
-        return jsonify(data=setting_dict, status={"code": 200, "message": "Successfully grabbed settings"})
-    except models.DoesNotExist:
-        return jsonify(data={}, status={"code": 404,\
-                                        "message": "Error getting the settings"})
+        person = [model_to_dict(person) for person in \
+                models.Person.select() \
+                .where(models.Person.id == current_user.id)] 	
+        print('TRYING TO PULL IN THE USER ===> UserId:', current_user.id)	
+        return jsonify(data=person, status={"code": 200, "message": "Success"})	
+    except models.DoesNotExist:	
+        return jsonify(data={}, \
+                    status={"code": 401, "message": "Log in or sign up to view your profile."})
         
-        
+
+          
 @settings.route('/update', methods=["PUT"])
 @login_required
 def update_settings():

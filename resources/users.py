@@ -1,6 +1,6 @@
 import models
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, session
 from playhouse.shortcuts import model_to_dict
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, current_user
@@ -22,11 +22,10 @@ def register():
         # if the user does not already exist... create a user
         payload['password'] = generate_password_hash(payload['password'])
         user = models.Person.create(**payload)
-
-        login_user(user)
         user_dict = model_to_dict(user)
         del user_dict['password'] # Don't expose password!
-
+        login_user(user=person, remember=True)	
+        session['logged_in']=True
         return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered user"})
 
 @users.route('/login', methods=["POST"])
@@ -37,14 +36,14 @@ def login():
     try:
         # see if user is registered
         user = models.Person.get(models.Person.email == payload['email'])
-
         user_dict = model_to_dict(user)
-
-        # check_password_hash(hashed_pw_from_db, unhashed_pw_from_payload)
+        
         if(check_password_hash(user_dict['password'], payload['password'])):
             del user_dict['password'] # delete hashed pw, unnecessary & unsafe
-            login_user(user) # start session
+            login_user(user=user, remember=True)
+            session['logged_in']=True
             return jsonify(data=user_dict, status={"code": 200, "message": "Successfully logged in user"})
+        
         else:
             return jsonify(data={}, status={"code": 401, "message": "Username or password is incorrect"})
     except models.DoesNotExist:
@@ -54,10 +53,3 @@ def login():
 def logout():
     logout_user()
     return jsonify(data={}, status={"code": 200, "message": "Successful"})
-
-# @users.route('/delete', methods=["Delete"])
-# def delete_account():
-    # do a query to get user
-    # get all user's dogs via the UserDog table
-    # delete dogs
-    # delete user
