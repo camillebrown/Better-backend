@@ -16,6 +16,7 @@ def get_meals():
 @meals.route('/', methods=['POST'])
 def create_meal():
     payload = request.get_json()
+    print(payload)
     meal = models.Meal.create(**payload)
     meal_dict = model_to_dict(meal)
     return jsonify(data=meal_dict, status={"code": 201, "message":"Successfully created a new meal!"})

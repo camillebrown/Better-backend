@@ -16,11 +16,9 @@ def create_new_setting():
 @settings.route('/', methods=["GET"])
 def get_settings():
     try:
-        person = [model_to_dict(person) for person in \
-                models.Person.select() \
-                .where(models.Person.id == current_user.id)] 	
-        print('TRYING TO PULL IN THE USER ===> UserId:', current_user.id)	
-        return jsonify(data=person, status={"code": 200, "message": "Success"})	
+        person = models.Person.get_by_id(current_user.id)
+        person_dict = model_to_dict(person)
+        return jsonify(data=person_dict, status={"code": 200, "message": "Success"})	
     except models.DoesNotExist:	
         return jsonify(data={}, \
                     status={"code": 401, "message": "Log in or sign up to view your profile."})
