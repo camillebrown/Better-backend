@@ -14,8 +14,7 @@ class Person(UserMixin, Model):
     password = CharField()
 
     class Meta:
-        database = DATABASE
-        
+        database = DATABASE       
     
 class PersonSetting(Model):
     ACTIVE_STATUSES = (
@@ -30,11 +29,6 @@ class PersonSetting(Model):
         (2, "Feel healthier (fitness/diet focused)"),
         (3, "Feel better (all of the above)")
     )
-   
-    DISPLAY_UNITS = (
-        (0, "Metric (km, Celsius)"),
-        (1, "Imperial (mi, Fahrenheit)")
-    )
     
     TIME_ZONES = (
         (0, "Eastern Standard Time - EST"),
@@ -48,7 +42,6 @@ class PersonSetting(Model):
     person = ForeignKeyField(Person, backref='settings')
     active_status = IntegerField(choices=ACTIVE_STATUSES)
     goal = IntegerField(choices=GOALS)
-    display_units = IntegerField(choices=DISPLAY_UNITS)
     time_zone = IntegerField(choices=TIME_ZONES)
     
     def get_status_label(self):
@@ -56,9 +49,6 @@ class PersonSetting(Model):
     
     def get_goal(self):
         return dict(self.GOALS)[self.goal]
-    
-    def get_display_units(self):
-        return dict(self.DISPLAY_UNITS)[self.display_units]
     
     def get_time_zone(self):
         return dict(self.TIME_ZONES)[self.time_zone]

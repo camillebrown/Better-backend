@@ -6,22 +6,28 @@ import json
 sleeps = Blueprint("sleeps", "sleeps")
 
 @sleeps.route('/', methods=['GET'])
+@login_required
 def get_sleep_logs():
     try:
-        sleep_logs = [model_to_dict(sleep) for sleep in models.Sleep.select()]
+        sleep_logs = [model_to_dict(sleep) for sleep in models.Sleep.select()\
+                .join_from(models.Sleep, models.Person)\
+                .where(models.Person.id==current_user.id)]
         return json.dumps(sleep_logs, indent=4, sort_keys=True, default=str)
         # return jsonify(data=sleep_logs, status={"code": 200, "message": "Successfully pulled all sleep logs"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message":"Error getting the sleep logs"})
     
 @sleeps.route('/', methods=['POST'])
+@login_required
 def create_sleep_log():
     payload = request.get_json()
+    payload['person_id'] = current_user.id
     sleep = models.Sleep.create(**payload)
     sleep_dict = model_to_dict(sleep)
     return jsonify(data=sleep_dict, status={"code": 201, "message":"Successfully created a new sleep log!"})
 
 @sleeps.route('/<sleep_id>', methods=["GET"])
+@login_required
 def get_sleep_log(sleep_id):
     try:
         sleep = models.Sleep.get_by_id(sleep_id)
@@ -32,6 +38,7 @@ def get_sleep_log(sleep_id):
                                         "message": "Error getting the sleep"})
         
 @sleeps.route('/<sleep_id>', methods=["PUT"])
+@login_required
 def update_sleep_log(sleep_id):
     try:
         payload = request.get_json()
@@ -44,6 +51,7 @@ def update_sleep_log(sleep_id):
                                         "message": "Error getting the sleep log"})
 
 @sleeps.route('/<sleep_id>', methods=["Delete"])
+@login_required
 def delete_sleep_log(sleep_id):
     try:
         sleep_to_delete = models.Sleep.get_by_id(sleep_id)

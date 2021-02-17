@@ -50,21 +50,6 @@ def index():
 CORS(app,\
      origins=['http://localhost:3000'],\
      supports_credentials=True)
-CORS(settings,\
-     origins=['http://localhost:3000'],\
-     supports_credentials=True)
-CORS(users,\
-     origins=['http://localhost:3000'],\
-     supports_credentials=True)
-CORS(meals,\
-     origins=['http://localhost:3000'],\
-     supports_credentials=True)
-CORS(moods,\
-     origins=['http://localhost:3000'],\
-     supports_credentials=True)
-CORS(sleeps,\
-     origins=['http://localhost:3000'],\
-     supports_credentials=True)
 
 app.register_blueprint(users, url_prefix='/api/v1/users')
 app.register_blueprint(workouts, url_prefix='/workouts')

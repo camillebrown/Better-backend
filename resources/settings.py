@@ -14,6 +14,7 @@ def create_new_setting():
     return jsonify(data=setting_dict, status={"code": 201, "message":"Successfully created settings for the user!"})
 
 @settings.route('/', methods=["GET"])
+@login_required
 def get_settings():
     try:
         person = models.Person.get_by_id(current_user.id)
