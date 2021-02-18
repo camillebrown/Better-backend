@@ -30,31 +30,34 @@ def register():
 
 @users.route('/login', methods=["POST"])
 def login():
+    #payload should contain email and password
     payload = request.get_json()
+    # make the inputted email lowercase
     payload['email'].lower()
     try:
         # see if user is registered
         user = models.Person.get(models.Person.email == payload['email'])
         user_dict = model_to_dict(user)
         if(check_password_hash(user_dict['password'], payload['password'])):
-            del user_dict['password'] # delete hashed pw, unnecessary & unsafe
+            del user_dict['password']
+            session.pop('person_id', None)
+            login_user(user = user, remember=True)
+            session['logged_in'] = True
+            session['person_id'] = user.id
             login_user(user=user, remember=True)
-            # session.pop()
             session['logged_in']=True
             print(session)
-            return jsonify(data=user_dict, status={"code": 200, "message": "Successfully logged in user"})
-        
+            return jsonify(data=user_dict, status={"code": 200, "message":"Success"})
         else:
-            return jsonify(data={}, status={"code": 401, "message": "Username or password is incorrect"})
+            return jsonify(data={'stats': 'username or password is incorrect'}, status={"code": 401, "message":"Username or password is incorrect."})
     except models.DoesNotExist:
-        return jsonify(data={}, status={"code": 401, "message": "Username or password is incorrect"})
+        return jsonify(data={}, status={"code": 401, "message":"Username or password is incorrect."})
 
 @users.route('/logout', methods=["GET", "POST"])
 @login_required
 def logout():
     try:
         logout_user()
-        session.pop(user)
         return jsonify(data={}, status={"code": 200, "message": "Successfully logged out"})
     except:
             return jsonify(data={}, status={"code": 401, "message": "No user logged in"})

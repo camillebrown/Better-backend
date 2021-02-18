@@ -17,6 +17,8 @@ def create_new_setting():
 @login_required
 def get_settings():
     try:
+        print('THIS IS THE CURRENT USER', current_user)
+        print('THIS IS THE CURRENT SESSION', session)
         person = models.Person.get_by_id(current_user.id)
         person_dict = model_to_dict(person)
         return jsonify(data=person_dict, status={"code": 200, "message": "Success"})	

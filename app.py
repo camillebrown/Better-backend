@@ -50,6 +50,21 @@ def index():
 CORS(app,\
      origins=['http://localhost:3000'],\
      supports_credentials=True)
+CORS(moods,\
+     origins=['http://localhost:3000'],\
+     supports_credentials=True)
+CORS(settings,\
+     origins=['http://localhost:3000'],\
+     supports_credentials=True)
+CORS(workouts,\
+     origins=['http://localhost:3000'],\
+     supports_credentials=True)
+CORS(meals,\
+     origins=['http://localhost:3000'],\
+     supports_credentials=True)
+CORS(sleeps,\
+     origins=['http://localhost:3000'],\
+     supports_credentials=True)
 
 app.register_blueprint(users, url_prefix='/api/v1/users')
 app.register_blueprint(workouts, url_prefix='/workouts')
@@ -57,7 +72,6 @@ app.register_blueprint(moods, url_prefix='/moods')
 app.register_blueprint(sleeps, url_prefix='/sleeps')
 app.register_blueprint(meals, url_prefix='/meals')
 app.register_blueprint(settings, url_prefix='/profile')
-
 
 
 if __name__ == '__main__':

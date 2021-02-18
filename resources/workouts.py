@@ -1,6 +1,7 @@
 import models
 from flask import Blueprint, jsonify, request
 from playhouse.shortcuts import model_to_dict
+from flask_login import login_user, logout_user, current_user, login_required
 
 workouts = Blueprint("workouts", "workouts")
 
@@ -9,6 +10,7 @@ workouts = Blueprint("workouts", "workouts")
 def get_workouts():
     # find the workouts and change each one to a dictionary in a new array
     try:
+        print('THIS IS THE CURRENT USER', current_user)
         workouts = [model_to_dict(workout) for workout in models.Fitness.select()\
                     .join_from(models.Fitness, models.Person)\
                     .where(models.Person.id==current_user.id)]
@@ -29,6 +31,7 @@ def create_workout():
 @login_required
 def get_workout(workout_id):
     try:
+        print('THIS IS THE CURRENT USER', current_user)
         workout = models.Fitness.get_by_id(workout_id)
         workout_dict = model_to_dict(workout)
         return jsonify(data=workout_dict, status={"code": 200, "message": "Successfully grabbed single workout"})

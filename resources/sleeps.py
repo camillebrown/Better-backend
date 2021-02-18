@@ -2,6 +2,7 @@ import models
 from flask import Blueprint, jsonify, request
 from playhouse.shortcuts import model_to_dict
 import json
+from flask_login import login_user, logout_user, current_user, login_required
 
 sleeps = Blueprint("sleeps", "sleeps")
 
@@ -60,4 +61,3 @@ def delete_sleep_log(sleep_id):
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 404,\
                                         "message": "Sleep log does not exist"})
-        
