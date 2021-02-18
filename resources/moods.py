@@ -9,8 +9,6 @@ moods = Blueprint("moods", "moods")
 @login_required
 def get_moods():
     try:
-        print('THIS IS THE CURRENT USER', current_user)
-        print('THIS IS THE CURRENT SESSION', session)
         moods = [model_to_dict(mood) for mood in models.Mood.select()\
                 .join_from(models.Mood, models.Person)\
                 .where(models.Person.id==current_user.id)]
@@ -22,8 +20,6 @@ def get_moods():
 @moods.route('/', methods=['POST'])
 @login_required
 def create_mood():
-    print('THIS IS THE CURRENT USER', current_user)
-    print('THIS IS THE CURRENT SESSION', session)
     payload = request.get_json()
     payload['person_id'] = current_user.id
     mood = models.Mood.create(**payload)

@@ -25,7 +25,6 @@ def register():
         del user_dict['password'] # Don't expose password!
         login_user(user=user, remember=True)	
         session['logged_in']=True
-        print(session)
         return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered user"})
 
 @users.route('/login', methods=["POST"])
@@ -46,7 +45,6 @@ def login():
             session['person_id'] = user.id
             login_user(user=user, remember=True)
             session['logged_in']=True
-            print(session)
             return jsonify(data=user_dict, status={"code": 200, "message":"Success"})
         else:
             return jsonify(data={'stats': 'username or password is incorrect'}, status={"code": 401, "message":"Username or password is incorrect."})

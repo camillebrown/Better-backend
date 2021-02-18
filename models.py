@@ -1,8 +1,6 @@
 from peewee import *
 from flask_login import UserMixin
 from datetime import date, datetime
-# from itsdangerous.serializer import Serializer
-
 
 DATABASE = PostgresqlDatabase('better_app', host='localhost', port=5432)
 
@@ -29,29 +27,16 @@ class PersonSetting(Model):
         (2, "Feel healthier (fitness/diet focused)"),
         (3, "Feel better (all of the above)")
     )
-    
-    TIME_ZONES = (
-        (0, "Eastern Standard Time - EST"),
-        (1, "Central Standard Time - CST"),
-        (2, "Mountain Standard Time - MST"),
-        (3, "Pacific Standard Time - PST"),
-        (4, "Alaska Standard Time - AKST"),
-        (5, "Hawaii Standard Time - HST")
-    )
-
     person = ForeignKeyField(Person, backref='settings')
     active_status = IntegerField(choices=ACTIVE_STATUSES)
     goal = IntegerField(choices=GOALS)
-    time_zone = IntegerField(choices=TIME_ZONES)
+    zip_code = CharField()
     
     def get_status_label(self):
         return dict(self.ACTIVE_STATUSES)[self.active_status]
     
     def get_goal(self):
         return dict(self.GOALS)[self.goal]
-    
-    def get_time_zone(self):
-        return dict(self.TIME_ZONES)[self.time_zone]
 
     class Meta:
         database = DATABASE

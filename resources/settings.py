@@ -9,6 +9,7 @@ settings = Blueprint("settings", "settings")
 @settings.route('/', methods=['POST'])
 def create_new_setting():
     payload = request.get_json()
+    payload['person_id'] = current_user.id
     setting = models.PersonSetting.create(**payload)
     setting_dict = model_to_dict(setting)
     return jsonify(data=setting_dict, status={"code": 201, "message":"Successfully created settings for the user!"})
