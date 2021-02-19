@@ -12,8 +12,11 @@ def get_moods():
         moods = [model_to_dict(mood) for mood in models.Mood.select()\
                 .join_from(models.Mood, models.Person)\
                 .where(models.Person.id==current_user.id)]
-        print(moods)
-        return jsonify(data=moods, status={"code": 200, "message": "Successfully pulled all moods"})
+        ratings = [mood.get_rating() for mood in models.Mood.select()\
+                  .join_from(models.Mood, models.Person)\
+                  .where(models.Person.id==current_user.id)]
+        print(ratings)
+        return jsonify(data=moods, ratings=ratings, status={"code": 200, "message": "Successfully pulled all moods"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message":"Error getting the moods"})
     
@@ -30,7 +33,6 @@ def create_mood():
 @login_required
 def get_mood(mood_id):
     try:
-        print('THIS IS THE CURRENT USER', current_user)
         mood = models.Mood.get_by_id(mood_id)
         rating = models.Mood.get_by_id(mood_id).get_rating()
         mood_dict = model_to_dict(mood)

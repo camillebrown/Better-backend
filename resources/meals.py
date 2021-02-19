@@ -13,7 +13,19 @@ def get_meals():
         meals = [model_to_dict(meal) for meal in models.Meal.select()\
                 .join_from(models.Meal, models.Person)\
                 .where(models.Person.id==current_user.id)]
-        return jsonify(data=meals, status={"code": 200, "message": "Successfully pulled all meals"})
+        carbs = [meal.carbs for meal in models.Meal.select()\
+                .join_from(models.Meal, models.Person)\
+                .where(models.Person.id==current_user.id)]
+        proteins = [meal.protein for meal in models.Meal.select()\
+                  .join_from(models.Meal, models.Person)\
+                  .where(models.Person.id==current_user.id)]
+        fats = [meal.fat for meal in models.Meal.select()\
+               .join_from(models.Meal, models.Person)\
+               .where(models.Person.id==current_user.id)]
+        calories = [meal.total_calories for meal in models.Meal.select()\
+               .join_from(models.Meal, models.Person)\
+               .where(models.Person.id==current_user.id)]
+        return jsonify(data=meals, carbs=carbs, proteins=proteins, fats=fats, calories=calories, status={"code": 200, "message": "Successfully pulled all meals"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message":"Error getting the meals"})
     
