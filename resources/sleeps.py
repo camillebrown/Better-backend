@@ -14,7 +14,6 @@ def get_sleep_logs():
                 .join_from(models.Sleep, models.Person)\
                 .where(models.Person.id==current_user.id)]
         return json.dumps(sleep_logs, indent=4, sort_keys=True, default=str)
-        # return jsonify(data=sleep_logs, status={"code": 200, "message": "Successfully pulled all sleep logs"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message":"Error getting the sleep logs"})
     
