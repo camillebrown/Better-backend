@@ -50,6 +50,19 @@ def login():
             return jsonify(data={'stats': 'username or password is incorrect'}, status={"code": 401, "message":"Username or password is incorrect."})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message":"Username or password is incorrect."})
+    
+    
+@users.route('/', methods=["GET"])
+@login_required
+def get_user():
+    try:
+        person = models.Person.get_by_id(current_user.id)
+        person_dict = model_to_dict(person)
+        return jsonify(data=person_dict, status={"code": 200, "message": "Success"})	
+    except models.DoesNotExist:	
+        return jsonify(data={}, \
+                    status={"code": 401, "message": "Log in or sign up to view your profile."})
+        
 
 @users.route('/logout', methods=["GET", "POST"])
 @login_required
