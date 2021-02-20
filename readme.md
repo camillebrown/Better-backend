@@ -47,8 +47,7 @@ Better. App allows user to track their daily fitness activity, moods, sleep patt
 * Sleep Form Page (Add/Update)
 
 ### ERD:
-![Screen Shot 2020-12-24 at 17 25 24](https://user-images.githubusercontent.com/68154135/103107550-6c465580-460d-11eb-826f-24db53149811.png)
-
+![](images/erd.png)
 
 ### Original Wireframes:
 ![](images/figma.png)
