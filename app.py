@@ -50,7 +50,7 @@ def index():
 
 CORS(app,\
      origins=['http://localhost:3000', 'https://better-you-app.herokuapp.com'],\
-#      supports_credentials=True)
+     supports_credentials=True)
 # CORS(moods,\
 #      origins=['http://localhost:3000', 'https://better-you-app.herokuapp.com'],\
 #      supports_credentials=True)
