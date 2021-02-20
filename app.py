@@ -49,23 +49,23 @@ def index():
     return 'This Flask App works!'
 
 CORS(app,\
-     origins=['http://localhost:3000', 'https://get-better-app.herokuapp.com'],\
-     supports_credentials=True)
-CORS(moods,\
-     origins=['http://localhost:3000', 'https://get-better-app.herokuapp.com'],\
-     supports_credentials=True)
-CORS(settings,\
-     origins=['http://localhost:3000', 'https://get-better-app.herokuapp.com'],\
-     supports_credentials=True)
-CORS(workouts,\
-     origins=['http://localhost:3000', 'https://get-better-app.herokuapp.com'],\
-     supports_credentials=True)
-CORS(meals,\
-     origins=['http://localhost:3000', 'https://get-better-app.herokuapp.com'],\
-     supports_credentials=True)
-CORS(sleeps,\
-     origins=['http://localhost:3000', 'https://get-better-app.herokuapp.com'],\
-     supports_credentials=True)
+     origins=['http://localhost:3000', 'https://better-you-app.herokuapp.com'],\
+#      supports_credentials=True)
+# CORS(moods,\
+#      origins=['http://localhost:3000', 'https://better-you-app.herokuapp.com'],\
+#      supports_credentials=True)
+# CORS(settings,\
+#      origins=['http://localhost:3000', 'https://better-you-app.herokuapp.com'],\
+#      supports_credentials=True)
+# CORS(workouts,\
+#      origins=['http://localhost:3000', 'https://better-you-app.herokuapp.com'],\
+#      supports_credentials=True)
+# CORS(meals,\
+#      origins=['http://localhost:3000', 'https://better-you-app.herokuapp.com'],\
+#      supports_credentials=True)
+# CORS(sleeps,\
+#      origins=['http://localhost:3000', 'https://better-you-app.herokuapp.com'],\
+#      supports_credentials=True)
 
 app.register_blueprint(users, url_prefix='/api/v1/users')
 app.register_blueprint(workouts, url_prefix='/workouts')
