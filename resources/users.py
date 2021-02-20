@@ -36,7 +36,6 @@ def login():
     try:
         # see if user is registered
         print('LOGGING IN USER')
-        print('TRYING TO GET CURRENT USER', current_user)
         user = models.Person.get(models.Person.email == payload['email'])
         user_dict = model_to_dict(user)
         if(check_password_hash(user_dict['password'], payload['password'])):
@@ -46,6 +45,7 @@ def login():
             session['logged_in'] = True
             session['person_id'] = user.id
             print(session)
+            print(current_user)
             login_user(user=user, remember=True)
             session['logged_in']=True
             return jsonify(data=user_dict, status={"code": 200, "message":"Success"})
