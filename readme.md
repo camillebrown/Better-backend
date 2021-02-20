@@ -15,18 +15,20 @@ npm i
 
 Better. App allows user to track their daily fitness activity, moods, sleep patterns, and meals over time. Using charts and graphs that make it easy to understand, the user can get insights into how each goal gets 'better'.
 
-
 ## Technologies Used:
 
 * Python 3
 * Flask / Peewee
 * Next.js
 * React
+
+## Resources Used:
 * Chakra UI
 * FontAwesome
 * Axios
 * Day.js
 * Chart.js
+* [FreePik Icons](https://www.freepik.com/)
 * [Open Weather API](https://openweathermap.org/api)
 * [Zen Quotes API](https://zenquotes.io/#docs)
 
