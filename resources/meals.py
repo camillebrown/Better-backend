@@ -10,6 +10,7 @@ meals = Blueprint("meals", "meals")
 @login_required
 def get_meals():
     try:
+        print(current_user)
         meals = [model_to_dict(meal) for meal in models.Meal.select()\
                 .join_from(models.Meal, models.Person)\
                 .where(models.Person.id==current_user.id)]
