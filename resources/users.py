@@ -36,7 +36,7 @@ def login():
     try:
         # see if user is registered
         print('LOGGING IN USER')
-        print('TRYING TO GET CURRENT USER', Current_user)
+        print('TRYING TO GET CURRENT USER', current_user)
         user = models.Person.get(models.Person.email == payload['email'])
         user_dict = model_to_dict(user)
         if(check_password_hash(user_dict['password'], payload['password'])):
