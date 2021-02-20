@@ -20,7 +20,8 @@ Better. App allows user to track their daily fitness activity, moods, sleep patt
 
 * Python 3
 * Flask / Peewee
-* React.js
+* Next.js
+* React
 * Chakra UI
 * FontAwesome
 * Axios
