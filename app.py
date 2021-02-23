@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify, g, session, make_response
 from flask_session import Session
-from redis import Redis
+# from redis import Redis
 from flask_cors import CORS
 from flask_login import LoginManager
-from flask_redis import Redis
-import redis
+# from flask_redis import Redis
+# import redis
 from flask.sessions import SecureCookieSessionInterface
 
 from playhouse.db_url import connect
