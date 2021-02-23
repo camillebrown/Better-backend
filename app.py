@@ -6,7 +6,7 @@ from flask_login import LoginManager
 from flask_redis import Redis
 import redis
 from flask.sessions import SecureCookieSessionInterface
-​
+
 from playhouse.db_url import connect
 import os 
 
@@ -19,9 +19,6 @@ from resources.moods import moods
 from resources.sleeps import sleeps
 from resources.meals import meals
 from resources.settings import settings
-​
-from datetime import timedelta
-​
 
 DEBUG = True
 PORT = 8000
@@ -30,7 +27,7 @@ PORT = 8000
 app = Flask(__name__)
 
 # create our session secret key
-app.config['SECRET_KEY'] = 'fignewton'
+app.config['SECRET_KEY']=(os.environ.get('SECRET_KEY'))
 app.config.from_pyfile('config.py')
 
 login_manager = LoginManager() # in JS -- const loginManager = new LoginManager()
@@ -42,14 +39,13 @@ def load_user(user_id):
         return models.Person.get_by_id(user_id)
     except models.DoesNotExist:
         return None
-​
+    
 @app.before_request
 def before_request():
     app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
     g.db = models.DATABASE
     g.db.connect()
-​
-​
+    
 @app.after_request
 def after_request(response):
     # same_cookie = session_cookie.dumps(dict(session))
@@ -63,13 +59,9 @@ def after_request(response):
 def index():
     return 'This Flask App works!'
 
-
-
-
 CORS(app,\
      origins=['http://localhost:3000', 'https://better-you-app.herokuapp.com', 'https://get-better-app.herokuapp.com/'],\
      supports_credentials=True)
-
 
 app.register_blueprint(users, url_prefix='/api/v1/users')
 app.register_blueprint(workouts, url_prefix='/workouts')
@@ -87,7 +79,7 @@ CORS(settings)
 if 'ON_HEROKU' in os.environ:
     print('hitting ')
     models.initialize()
-
+    
 if __name__ == '__main__':
     app.secret_key = 'fignewton'
     models.initialize()
