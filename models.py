@@ -4,6 +4,8 @@ from datetime import date, datetime
 import os
 from playhouse.db_url import connect
 
+
+
 DATABASE = connect(os.environ.get('DATABASE_URL'))
 # DATABASE = PostgresqlDatabase('better_app', host='localhost', port=5432)
 
