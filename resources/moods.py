@@ -15,7 +15,6 @@ def get_moods():
         ratings = [mood.get_rating() for mood in models.Mood.select()\
                   .join_from(models.Mood, models.Person)\
                   .where(models.Person.id==current_user.id)]
-        print(ratings)
         return jsonify(data=moods, ratings=ratings, status={"code": 200, "message": "Successfully pulled all moods"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message":"Error getting the moods"})

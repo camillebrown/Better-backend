@@ -18,9 +18,6 @@ def create_new_setting():
 @login_required
 def get_settings():
     try:
-        print('TRYING TO GET PROFILE INFO')
-        print(session)
-        print(current_user)
         settings = models.PersonSetting.select()\
             .join(models.Person)\
             .where(models.Person.id==current_user.id)\

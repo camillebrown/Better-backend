@@ -22,7 +22,6 @@ def register():
         payload['password'] = generate_password_hash(payload['password'])
         user = models.Person.create(**payload)
         user_dict = model_to_dict(user)
-        print('NEW USER CREATED', user)
         del user_dict['password'] # Don't expose password!
         login_user(user=user, remember=True)	
         session['logged_in']=True
@@ -36,7 +35,6 @@ def login():
     payload['email'].lower()
     try:
         # see if user is registered
-        print('LOGGING IN USER')
         user = models.Person.get(models.Person.email == payload['email'])
         user_dict = model_to_dict(user)
         if(check_password_hash(user_dict['password'], payload['password'])):
@@ -45,8 +43,6 @@ def login():
             login_user(user = user, remember=True)
             session['logged_in'] = True
             session['person_id'] = user.id
-            print(session)
-            print(current_user)
             login_user(user=user, remember=True)
             session['logged_in']=True
             return jsonify(data=user_dict, status={"code": 200, "message":"Success"})
