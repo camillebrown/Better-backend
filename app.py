@@ -1,10 +1,7 @@
 from flask import Flask, request, jsonify, g, session, make_response
 from flask_session import Session
-# from redis import Redis
 from flask_cors import CORS
 from flask_login import LoginManager
-# from flask_redis import Redis
-# import redis
 from flask.sessions import SecureCookieSessionInterface
 
 from playhouse.db_url import connect
@@ -50,7 +47,7 @@ def before_request():
 def after_request(response):
     # same_cookie = session_cookie.dumps(dict(session))
     app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
-    response.headers.add("Set-Cookie", f"my_cookie='a cookie'; Secure; SameSite=None;")
+    response.headers.add("Set-Cookie", "my_cookie='a cookie'; Secure; SameSite=None;")
     g.db = models.DATABASE
     g.db.close()
     return response

@@ -72,6 +72,8 @@ def get_user():
 def logout():
     try:
         logout_user()
+        session.pop()
+        session.clear()
         return jsonify(data={}, status={"code": 200, "message": "Successfully logged out"})
     except:
             return jsonify(data={}, status={"code": 401, "message": "No user logged in"})
