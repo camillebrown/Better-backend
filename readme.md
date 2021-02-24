@@ -11,6 +11,11 @@ npm i
 
 ---
 
+## [Link to Deployed App](https://better-you-app.herokuapp.com)
+
+## [Link to Frontend Repo](https://github.com/camillebrown/Better-frontend)
+
+
 ## Concept:
 
 Better. App allows user to track their daily fitness activity, moods, sleep patterns, and meals over time. Using charts and graphs that make it easy to understand, the user can get insights into how each goal gets 'better'.
