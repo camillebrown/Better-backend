@@ -22,6 +22,7 @@ def register():
         payload['password'] = generate_password_hash(payload['password'])
         user = models.Person.create(**payload)
         user_dict = model_to_dict(user)
+        print('NEW USER CREATED', user)
         del user_dict['password'] # Don't expose password!
         login_user(user=user, remember=True)	
         session['logged_in']=True
