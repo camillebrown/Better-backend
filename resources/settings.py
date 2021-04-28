@@ -8,6 +8,7 @@ settings = Blueprint("settings", "settings")
     
 @settings.route('/', methods=['POST'])
 def create_new_setting():
+    print('!!!!!!!!!!!!!!!!!!CURRENT USER!!!!!!!!!!!!!!!!!!', current_user)
     payload = request.get_json()
     print('!!!!!!!!!!!!!!!!!!GOT PAYLOAD!!!!!!!!!!!!!!!!!!', payload)
     payload['person_id'] = current_user.id

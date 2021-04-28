@@ -29,9 +29,9 @@ def register():
         user_dict = model_to_dict(user)
         del user_dict['password'] # Don't expose password!
         login_user(user=user, remember=True)	
-        print('!!!!!!!!!!!!!!!!!!LOGGED IN USER!!!!!!!!!!!!!!!!!!')
+        print('!!!!!!!!!!!!!!!!!!LOGGED IN USER!!!!!!!!!!!!!!!!!!', current_user.id)
         session['logged_in']=True
-        print('!!!!!!!!!!!!!!!!!!SESSION STARTED!!!!!!!!!!!!!!!!!!')
+        print('!!!!!!!!!!!!!!!!!!SESSION STARTED!!!!!!!!!!!!!!!!!!', session['logged_in'])
         return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered user"})
 
 @users.route('/login', methods=["POST"])
