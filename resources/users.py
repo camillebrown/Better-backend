@@ -22,6 +22,7 @@ def register():
                                "message": "A user with that email already exists."})
     except models.DoesNotExist:
         # if the user does not already exist... create a user
+        print('!!!!!!!!!!!!!!!!!!TRYING TO SIGN UP A USER!!!!!!!!!!!!!!!!!!')
         payload['password'] = generate_password_hash(payload['password'])
         user = models.Person.create(username=payload['username'], password=payload['password'], email=payload['email'])
         user_dict = model_to_dict(user)
