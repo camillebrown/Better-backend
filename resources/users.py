@@ -47,7 +47,7 @@ def login():
         user_dict = model_to_dict(user)
         print('!!!!!!!!!!!!!!!!!!USER DICT CREATED!!!!!!!!!!!!!!!!!!', user_dict)
         if(check_password_hash(user_dict['password'], payload['password'])):
-        print('!!!!!!!!!!!!!!!!!PASSWORD CORRECT!!!!!!!!!!!!!!!!!!')
+            print('!!!!!!!!!!!!!!!!!PASSWORD CORRECT!!!!!!!!!!!!!!!!!!')
             del user_dict['password']
             session.pop('person_id', None)
             login_user(user = user, remember=True)
