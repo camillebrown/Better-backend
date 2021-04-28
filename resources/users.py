@@ -1,18 +1,21 @@
 import models
 
 from flask import Blueprint, jsonify, request, session
-from playhouse.shortcuts import model_to_dict
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, current_user, login_required
+from flask.sessions import SecureCookieSessionInterface
+from playhouse.shortcuts import model_to_dict
+
 
 users = Blueprint("users", "users")
 
 @users.route('/register', methods=["POST"])
 def register():
     payload = request.get_json()
+        # make the inputted email lowercase
     payload['email'].lower()
+
     try:
-        # Does the user already exist / is the username taken?
         models.Person.get(models.Person.email == payload['email'])
         return jsonify(data={},\
                        status={"code": 401,\
@@ -20,7 +23,7 @@ def register():
     except models.DoesNotExist:
         # if the user does not already exist... create a user
         payload['password'] = generate_password_hash(payload['password'])
-        user = models.Person.create(**payload)
+        user = models.Person.create(username=payload['username'], password=payload['password'], email=payload['email'])
         user_dict = model_to_dict(user)
         del user_dict['password'] # Don't expose password!
         login_user(user=user, remember=True)	
@@ -45,32 +48,35 @@ def login():
             session['person_id'] = user.id
             login_user(user=user, remember=True)
             session['logged_in']=True
+            session['username'] = user.username
+            g.user = user.username
             return jsonify(data=user_dict, status={"code": 200, "message":"Success"})
         else:
             return jsonify(data={'stats': 'username or password is incorrect'}, status={"code": 401, "message":"Username or password is incorrect."})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message":"Username or password is incorrect."})
     
+@users.route('/logout', methods=["GET", "POST"])
+@login_required
+def logout():
+    try:
+        session.pop('person_id', None)
+        session.pop('logged_in', None)
+        logout_user()
+        session.clear()
+        return jsonify(data={}, status={"code": 200, "message": "Successfully logged out"})
+    except:
+            return jsonify(data={}, status={"code": 401, "message": "No user logged in"})
     
 @users.route('/', methods=["GET"])
 @login_required
 def get_user():
     try:
-        person = models.Person.get_by_id(current_user.id)
-        person_dict = model_to_dict(person)
-        return jsonify(data=person_dict, status={"code": 200, "message": "Success"})	
-    except models.DoesNotExist:	
+        person = [model_to_dict(person) for person in \
+                models.Person.select() \
+                .where(models.Person.id == current_user.id)] 
+        return jsonify(data=person, status={"code": 200, "message": "Success"})
+    except models.DoesNotExist:
         return jsonify(data={}, \
                     status={"code": 401, "message": "Log in or sign up to view your profile."})
-        
 
-@users.route('/logout', methods=["GET", "POST"])
-@login_required
-def logout():
-    try:
-        logout_user()
-        session.pop()
-        session.clear()
-        return jsonify(data={}, status={"code": 200, "message": "Successfully logged out"})
-    except:
-            return jsonify(data={}, status={"code": 401, "message": "No user logged in"})

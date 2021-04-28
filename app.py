@@ -53,11 +53,12 @@ def after_request(response):
     return response
 
 @app.route('/')
-def index():
-    return 'This Flask App works!'
+def hello_world():
+    resp = make_response('Hello, World!')
+    return 'hello this flask app is working'
 
 CORS(app,\
-     origins=['http://localhost:3000', 'https://better-you-app.herokuapp.com', 'https://get-better-app.herokuapp.com/'],\
+     origins=['http://localhost:3000', 'https://parks-passsport.vercel.app', 'https://parkspassport-api-heroku.herokuapp.com/'],\
      supports_credentials=True)
 
 app.register_blueprint(users, url_prefix='/api/v1/users')
@@ -78,6 +79,5 @@ if 'ON_HEROKU' in os.environ:
     models.initialize()
     
 if __name__ == '__main__':
-    app.secret_key = 'fignewton'
     models.initialize()
     app.run(port=8000, debug=True)
