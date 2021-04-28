@@ -14,7 +14,7 @@ def register():
     payload = request.get_json()
         # make the inputted email lowercase
     payload['email'].lower()
-
+    
     try:
         models.Person.get(models.Person.email == payload['email'])
         return jsonify(data={},\
@@ -23,11 +23,15 @@ def register():
     except models.DoesNotExist:
         # if the user does not already exist... create a user
         payload['password'] = generate_password_hash(payload['password'])
+        print('!!!!!!!!!!!!!!!!!!CREATED PASSWORD!!!!!!!!!!!!!!!!!!')
         user = models.Person.create(**payload)
+        print('!!!!!!!!!!!!!!!!!!CREATED USER!!!!!!!!!!!!!!!!!!')
         user_dict = model_to_dict(user)
         del user_dict['password'] # Don't expose password!
         login_user(user=user, remember=True)	
+        print('!!!!!!!!!!!!!!!!!!LOGGED IN USER!!!!!!!!!!!!!!!!!!')
         session['logged_in']=True
+        print('!!!!!!!!!!!!!!!!!!SESSION STARTED!!!!!!!!!!!!!!!!!!')
         return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered user"})
 
 @users.route('/login', methods=["POST"])
@@ -39,17 +43,25 @@ def login():
     try:
         # see if user is registered
         user = models.Person.get(models.Person.email == payload['email'])
+        print('!!!!!!!!!!!!!!!!!!USER FOUND!!!!!!!!!!!!!!!!!!', user)
         user_dict = model_to_dict(user)
+        print('!!!!!!!!!!!!!!!!!!USER DICT CREATED!!!!!!!!!!!!!!!!!!', user_dict)
         if(check_password_hash(user_dict['password'], payload['password'])):
+        print('!!!!!!!!!!!!!!!!!PASSWORD CORRECT!!!!!!!!!!!!!!!!!!')
             del user_dict['password']
             session.pop('person_id', None)
             login_user(user = user, remember=True)
+            print('!!!!!!!!!!!!!!!!!!LOGGED IN USER!!!!!!!!!!!!!!!!!!')
             session['logged_in'] = True
             session['person_id'] = user.id
+            print('!!!!!!!!!!!!!!!!!!SESSION STARTED!!!!!!!!!!!!!!!!!!')
             login_user(user=user, remember=True)
+            print('!!!!!!!!!!!!!!!!!!LOGGED IN USER!!!!!!!!!!!!!!!!!!')
             session['logged_in']=True
             session['username'] = user.username
+            print('!!!!!!!!!!!!!!!!!!SESSION STARTED!!!!!!!!!!!!!!!!!!')
             g.user = user.username
+            print('!!!!!!!!!!!!!!!!!!GLOBAL USER CREATED!!!!!!!!!!!!!!!!!!')
             return jsonify(data=user_dict, status={"code": 200, "message":"Success"})
         else:
             return jsonify(data={'stats': 'username or password is incorrect'}, status={"code": 401, "message":"Username or password is incorrect."})
