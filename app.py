@@ -25,6 +25,7 @@ app = Flask(__name__)
 
 # create our session secret key
 app.config['SECRET_KEY']=(os.environ.get('SECRET_KEY'))
+app.config['CORS_HEADERS'] = 'Content-Type'
 app.config.from_pyfile('config.py')
 
 login_manager = LoginManager() # in JS -- const loginManager = new LoginManager()
@@ -58,7 +59,7 @@ def hello_world():
     return 'hello this flask app is working'
 
 CORS(app,\
-     origins=['http://localhost:3000', 'https://parks-passsport.vercel.app', 'https://parkspassport-api-heroku.herokuapp.com/'],\
+     origins=['http://localhost:3000', 'https://better-you-app.herokuapp.com', 'https://get-better-app.herokuapp.com/'],\
      supports_credentials=True)
 
 app.register_blueprint(users, url_prefix='/api/v1/users')
