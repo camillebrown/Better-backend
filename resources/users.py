@@ -24,11 +24,14 @@ def register():
         # if the user does not already exist... create a user
         print('!!!!!!!!!!!!!!!!!!TRYING TO SIGN UP A USER!!!!!!!!!!!!!!!!!!')
         payload['password'] = generate_password_hash(payload['password'])
+        print('!!!!!!!!!!!!!!!!!!GENERATED PASSWORD!!!!!!!!!!!!!!!!!!')
         user = models.Person.create(username=payload['username'], password=payload['password'], email=payload['email'])
+        print('!!!!!!!!!!!!!!!!!!USER CREATED!!!!!!!!!!!!!!!!!!')
         user_dict = model_to_dict(user)
         del user_dict['password'] # Don't expose password!
         login_user(user=user, remember=True)	
         session['logged_in']=True
+        print('!!!!!!!!!!!!!!!!!!USER REGISTERED AND LOGGED IN!!!!!!!!!!!!!!!!!!')
         return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered user"})
 
 @users.route('/login', methods=["POST"])
