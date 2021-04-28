@@ -25,7 +25,7 @@ def get_settings():
             .join(models.Person)\
             .where(models.Person.id==current_user.id)\
             .get()
-        print('!!!!!!!!!!!!!!!!!!GOT SETTINGS!!!!!!!!!!!!!!!!!!')
+            print('!!!!!!!!!!!!!!!!!!GOT SETTINGS!!!!!!!!!!!!!!!!!!')
         settings_dict = model_to_dict(settings)
         print('!!!!!!!!!!!!!!!!!!GOT SETTINGS DICT!!!!!!!!!!!!!!!!!!', settings_dict)
         return jsonify(data=settings_dict, status={"code": 200, "message": "Success"})	
