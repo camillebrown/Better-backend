@@ -27,7 +27,7 @@ def register():
         print('!!!!!!!!!!!!!!!!!!CREATED USER!!!!!!!!!!!!!!!!!!')
         user_dict = model_to_dict(user)
         del user_dict['password'] # Don't expose password!
-        login_user(user, remember=True)	
+        login_user(user=user,force=False, remember=True)	
         print('!!!!!!!!!!!!!!!!!!LOGGED IN USER!!!!!!!!!!!!!!!!!!', current_user.id)
         session['logged_in']=True
         confirm_login()
