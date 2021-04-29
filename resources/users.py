@@ -2,7 +2,7 @@ import models
 
 from flask import Blueprint, jsonify, request, session, g
 from flask_bcrypt import generate_password_hash, check_password_hash
-from flask_login import login_user, logout_user, current_user, login_required, confirm_login
+from flask_login import login_user, logout_user, current_user, login_required, confirm_login, flash
 from flask.sessions import SecureCookieSessionInterface
 from playhouse.shortcuts import model_to_dict
 
@@ -27,11 +27,11 @@ def register():
         print('!!!!!!!!!!!!!!!!!!CREATED USER!!!!!!!!!!!!!!!!!!')
         user_dict = model_to_dict(user)
         del user_dict['password'] # Don't expose password!
-        login_user(user=user,force=False, remember=True)	
+        login_user(user=user, force=False, remember=True)	
         print('!!!!!!!!!!!!!!!!!!LOGGED IN USER!!!!!!!!!!!!!!!!!!', current_user.id)
         session['logged_in']=True
         confirm_login()
-        flask.flash('Logged in successfully.')
+        flash('Logged in successfully.')
         print('!!!!!!!!!!!!!!!!!!SESSION STARTED!!!!!!!!!!!!!!!!!!', session['logged_in'])
         return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered user"})
 
