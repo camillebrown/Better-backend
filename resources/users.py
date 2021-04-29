@@ -1,8 +1,8 @@
 import models
 
-from flask import Blueprint, jsonify, request, session, g
+from flask import Blueprint, jsonify, request, session, g, flash
 from flask_bcrypt import generate_password_hash, check_password_hash
-from flask_login import login_user, logout_user, current_user, login_required, confirm_login, flash
+from flask_login import login_user, logout_user, current_user, login_required, confirm_login
 from flask.sessions import SecureCookieSessionInterface
 from playhouse.shortcuts import model_to_dict
 
