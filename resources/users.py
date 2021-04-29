@@ -23,14 +23,15 @@ def register():
     except models.DoesNotExist:
         # if the user does not already exist... create a user
         payload['password'] = generate_password_hash(payload['password'])
-        print('!!!!!!!!!!!!!!!!!!CREATED PASSWORD!!!!!!!!!!!!!!!!!!')
         user = models.Person.create(**payload)
         print('!!!!!!!!!!!!!!!!!!CREATED USER!!!!!!!!!!!!!!!!!!')
         user_dict = model_to_dict(user)
         del user_dict['password'] # Don't expose password!
-        login_user(user=user, remember=True)	
+        login_user(user, remember=True)	
         print('!!!!!!!!!!!!!!!!!!LOGGED IN USER!!!!!!!!!!!!!!!!!!', current_user.id)
         session['logged_in']=True
+        confirm_login()
+        flask.flash('Logged in successfully.')
         print('!!!!!!!!!!!!!!!!!!SESSION STARTED!!!!!!!!!!!!!!!!!!', session['logged_in'])
         return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered user"})
 
