@@ -10,6 +10,7 @@ settings = Blueprint("settings", "settings")
 def create_new_setting():
     payload = request.get_json()
     print('!!!!!!!!!!!!!!!!!!GOT PAYLOAD!!!!!!!!!!!!!!!!!!', payload)
+    print('!!!!!!!!!!!!!!!!!!CURRENT USER!!!!!!!!!!!!!!!!!!', current_user)
     payload['person_id'] = current_user.id
     print('!!!!!!!!!!!!!!!!!!GOT CURRENT USER!!!!!!!!!!!!!!!!!!', current_user.id)
     setting = models.PersonSetting.create(**payload)
