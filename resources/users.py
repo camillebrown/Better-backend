@@ -78,11 +78,14 @@ def get_user():
         return jsonify(data={},
                        status={"code": 401, "message": "Log in or sign up to view your profile."})
 
-
 @users.route('/logout', methods=["GET", "POST"])
 @login_required
 def logout():
-    session.pop('person_id', None)
-    session.pop('logged_in', None)
-    logout_user()
-    return jsonify(data={}, status={"code": 200, "message": "Successful logout!"})
+    try:
+        logout_user()
+        session.pop()
+        session.clear()
+        return jsonify(data={}, status={"code": 200, "message": "Successfully logged out"})
+    except:
+            return jsonify(data={}, status={"code": 401, "message": "No user logged in"})
+
