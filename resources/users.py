@@ -67,7 +67,6 @@ def login():
 
 
 @users.route('/', methods=["GET"])
-@login_required
 def get_user():
     try:
         user = [model_to_dict(user) for user in
