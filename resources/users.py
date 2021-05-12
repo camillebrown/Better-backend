@@ -1,9 +1,8 @@
 import models
 
-from flask import Blueprint, jsonify, request, session, g, flash
+from flask import Blueprint, jsonify, request, session, g
 from flask_bcrypt import generate_password_hash, check_password_hash
-from flask_login import login_user, logout_user, current_user, login_required, confirm_login
-from flask.sessions import SecureCookieSessionInterface
+from flask_login import login_user, logout_user, current_user
 from playhouse.shortcuts import model_to_dict
 
 
@@ -69,13 +68,12 @@ def login():
 @users.route('/', methods=["GET"])
 def get_user():
     try:
-        user = [model_to_dict(user) for user in
-                  models.Person.select()
-                  .where(models.Person.id == current_user.id)]
-        return jsonify(data=user, status={"code": 200, "message": "Success"})
-    except models.DoesNotExist:
-        return jsonify(data={},
-                       status={"code": 401, "message": "Log in or sign up to view your profile."})
+        person = models.Person.get_by_id(current_user.id)
+        person_dict = model_to_dict(person)
+        return jsonify(data=person_dict, status={"code": 200, "message": "Success"})	
+    except models.DoesNotExist:	
+        return jsonify(data={}, \
+                    status={"code": 401, "message": "Log in or sign up to view your profile."})
 
 @users.route('/logout', methods=["GET", "POST"])
 def logout():

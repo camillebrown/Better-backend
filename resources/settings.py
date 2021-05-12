@@ -1,7 +1,6 @@
 import models
-from flask import Blueprint, jsonify, request, session
-from flask_cors import CORS, cross_origin
-from flask_login import LoginManager, login_required, current_user
+from flask import Blueprint, jsonify, request
+from flask_login import login_required, current_user
 from playhouse.shortcuts import model_to_dict
 
 settings = Blueprint("settings", "settings")
@@ -10,13 +9,9 @@ settings = Blueprint("settings", "settings")
 @settings.route('/', methods=['POST'])
 def create_new_setting():
     payload = request.get_json()
-    print('!!!!!!!!!!!!!!!!!!GOT PAYLOAD!!!!!!!!!!!!!!!!!!', payload)
-    print('!!!!!!!!!!!!!!!!!!CURRENT USER!!!!!!!!!!!!!!!!!!', current_user)
     payload['person_id'] = current_user.id
-    print('!!!!!!!!!!!!!!!!!!GOT CURRENT USER!!!!!!!!!!!!!!!!!!', current_user.id)
     setting = models.PersonSetting.create(**payload)
     setting_dict = model_to_dict(setting)
-    print('!!!!!!!!!!!!!!!!!!GOT SETTINGS!!!!!!!!!!!!!!!!!!', setting_dict)
     return jsonify(data=setting_dict, status={"code": 201, "message": "Successfully created settings for the user!"})
 
 
@@ -24,23 +19,15 @@ def create_new_setting():
 @login_required
 def get_settings():
     try:
-        # settings = models.PersonSetting.select()\
-        #     .join(models.Person)\
-        #     .where(models.Person.id==current_user.id)\
-        #     .get()
-        # settings_dict = model_to_dict(settings)
-        #     print('!!!!!!!!!!!!!!!!!!GOT SETTINGS DICT!!!!!!!!!!!!!!!!!!', settings_dict)
-        #     return jsonify(data=settings_dict, status={"code": 200, "message": "Success"})
-        # except models.DoesNotExist:
-        #     return jsonify(data={}, \
-        # status={"code": 401, "message": "User has no settings"})
-        user = [model_to_dict(user) for user in
-                models.Person.select()
-                .where(models.Person.id == current_user.id)]
-        return jsonify(data=user, status={"code": 200, "message": "Success"})
+        settings = models.PersonSetting.select()\
+            .join(models.Person)\
+            .where(models.Person.id == current_user.id)\
+            .get()
+        settings_dict = model_to_dict(settings)
+        return jsonify(data=settings_dict, status={"code": 200, "message": "Success"})
     except models.DoesNotExist:
         return jsonify(data={},
-                       status={"code": 401, "message": "Log in or sign up to view your profile."})
+                       status={"code": 401, "message": "User has no settings"})
 
 
 @settings.route('/update', methods=["PUT"])
