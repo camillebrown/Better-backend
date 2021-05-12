@@ -1,7 +1,8 @@
 import models
-from flask import Blueprint, jsonify, request, session
+from peewee import *
+from flask import Blueprint, jsonify, request
+from flask_login import login_required, current_user
 from playhouse.shortcuts import model_to_dict
-from flask_login import LoginManager,login_required, current_user
 
 moods = Blueprint("moods", "moods")
 

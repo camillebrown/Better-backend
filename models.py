@@ -1,6 +1,6 @@
 from peewee import *
-from flask_login import UserMixin
 from datetime import date, datetime
+from flask_login import UserMixin
 import os
 from playhouse.db_url import connect
 
@@ -9,17 +9,21 @@ from playhouse.db_url import connect
 DATABASE = connect(os.environ.get('DATABASE_URL'))
 # DATABASE = PostgresqlDatabase('better_app', host='localhost', port=5432)
 
-class Person(UserMixin, Model):
+class BaseModel(Model):
+    class Meta:
+        database = DATABASE
+
+class Person(UserMixin, BaseModel):
     first_name = CharField()
     last_name = CharField()
     username = CharField(unique=True)
     email = CharField(unique=True)
     password = CharField()
 
-    class Meta:
-        database = DATABASE       
+    # class Meta:
+    #     database = DATABASE       
     
-class PersonSetting(Model):
+class PersonSetting(BaseModel):
     ACTIVE_STATUSES = (
         (0, "Mostly sedatary (less than 2 hrs a week)"),
         (1, "Moderate (2-4 hrs a week)"),
@@ -43,10 +47,10 @@ class PersonSetting(Model):
     def get_goal(self):
         return dict(self.GOALS)[self.goal]
 
-    class Meta:
-        database = DATABASE
+    # class Meta:
+    #     database = DATABASE
 
-class Fitness(Model):
+class Fitness(BaseModel):
     person=ForeignKeyField(Person, backref='workouts')
     #############MAKE THESE REQUIRED############
     exercise_name = CharField()
@@ -59,10 +63,10 @@ class Fitness(Model):
     weight = IntegerField()
     created_at = DateTimeField(default=datetime.now)
 
-    class Meta:
-        database = DATABASE
+    # class Meta:
+    #     database = DATABASE
 
-class Mood(Model):
+class Mood(BaseModel):
     RATINGS = (
         (0, "Wow, today sucks!"),
         (1, "Not good, but I guess it could be worse."),
@@ -81,10 +85,10 @@ class Mood(Model):
     def get_rating(self):
         return dict(self.RATINGS)[self.rating]
 
-    class Meta:
-        database = DATABASE
+    # class Meta:
+    #     database = DATABASE
 
-class Meal(Model):
+class Meal(BaseModel):
     person = ForeignKeyField(Person, backref='meals')
     meal_name = CharField()
     protein = IntegerField()
@@ -95,10 +99,10 @@ class Meal(Model):
         default=datetime.now
     )
 
-    class Meta:
-        database = DATABASE
+    # class Meta:
+    #     database = DATABASE
 
-class Sleep(Model):
+class Sleep(BaseModel):
     person = ForeignKeyField(Person, backref='sleeps')
     date = DateField(
         formats="%d/%m/%Y",
@@ -113,11 +117,12 @@ class Sleep(Model):
         default=datetime.now
     )
 
-    class Meta:
-        database = DATABASE
+    # class Meta:
+    #     database = DATABASE
 
 def initialize():
     DATABASE.connect()
-    DATABASE.create_tables([Person, PersonSetting, Fitness, Mood, Meal, Sleep], safe=True)
+    DATABASE.create_tables([Person, PersonSetting, Fitness, Mood, Meal, Sleep] #, safe=True 
+    )
     print("TABLES Created")
     DATABASE.close()
