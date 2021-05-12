@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, g, session, make_response
 from flask_session import Session
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask_login import LoginManager
 from flask.sessions import SecureCookieSessionInterface
 from playhouse.db_url import connect
@@ -15,6 +15,10 @@ from resources.settings import settings
 
 # instantiate the app
 app = Flask(__name__)
+
+# create our session secret key
+app.config['SECRET_KEY']=(os.environ.get('SECRET_KEY'))
+app.config['CORS_HEADERS'] = 'Content-Type'
 app.config.from_pyfile('config.py')
 
 # # create our session secret key
@@ -45,6 +49,7 @@ def after_request(response):
     return response
 
 @app.route('/')
+@cross_origin()
 def hello_world():
     resp = make_response('Hello, World!')
     return 'hello this flask app is working'
