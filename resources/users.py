@@ -78,7 +78,6 @@ def get_user():
                        status={"code": 401, "message": "Log in or sign up to view your profile."})
 
 @users.route('/logout', methods=["GET", "POST"])
-@login_required
 def logout():
     try:
         logout_user()
