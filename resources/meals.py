@@ -25,7 +25,6 @@ def get_meals():
         calories = [meal.total_calories for meal in models.Meal.select()\
                .join_from(models.Meal, models.Person)\
                .where(models.Person.id==current_user.id)]
-        print('!!!!!!!!!!!!!!!!!!GOT MEALS!!!!!!!!!!!!!!!!!!', meals)       
         return jsonify(data=meals, carbs=carbs, proteins=proteins, fats=fats, calories=calories, status={"code": 200, "message": "Successfully pulled all meals"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message":"Error getting the meals"})
