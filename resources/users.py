@@ -12,9 +12,9 @@ users = Blueprint("users", "users")
 @users.route('/register', methods=["POST"])
 def register():
     payload = request.get_json()
-        # make the inputted email lowercase
+    # make the inputted email lowercase
     payload['email'].lower()
-    
+
     try:
         models.Person.get(models.Person.email == payload['email'])
         return jsonify(data={},
@@ -24,10 +24,13 @@ def register():
         # if the user does not already exist... create a user
         payload['password'] = generate_password_hash(payload['password'])
         user = models.Person.create(**payload)
+        print("!!!!!!!!!!!!!!CREATED USER!!!!!!!!!!!!", user)
         user_dict = model_to_dict(user)
         del user_dict['password']  # Don't expose password!
         login_user(user=user, remember=True)
+        print("!!!!!!!!!!!!!USER LOGGED IN!!!!!!!!!!!!", user.id)
         session['logged_in'] = True
+        print("!!!!!!!!!!!!!!SESSION SAVED!!!!!!!!!!!!", session['logged_in'])
         return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered user"})
 
 
@@ -62,11 +65,13 @@ def login():
 def get_user():
     try:
         person = models.Person.get_by_id(current_user.id)
+        print("!!!!!!!!!!!!!!CURRENT USER!!!!!!!!!!!!", current_user)
         person_dict = model_to_dict(person)
-        return jsonify(data=person_dict, status={"code": 200, "message": "Success"})	
-    except models.DoesNotExist:	
-        return jsonify(data={}, \
-                    status={"code": 401, "message": "Log in or sign up to view your profile."})
+        return jsonify(data=person_dict, status={"code": 200, "message": "Success"})
+    except models.DoesNotExist:
+        return jsonify(data={},
+                       status={"code": 401, "message": "Error getting the user info."})
+
 
 @users.route('/logout', methods=["GET", "POST"])
 def logout():
@@ -76,5 +81,4 @@ def logout():
         session.clear()
         return jsonify(data={}, status={"code": 200, "message": "Successfully logged out"})
     except:
-            return jsonify(data={}, status={"code": 401, "message": "No user logged in"})
-
+        return jsonify(data={}, status={"code": 401, "message": "No user logged in"})
