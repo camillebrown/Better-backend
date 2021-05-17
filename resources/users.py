@@ -65,7 +65,6 @@ def login():
 def get_user():
     try:
         person = models.Person.get_by_id(current_user.id)
-        print("!!!!!!!!!!!!!!CURRENT USER!!!!!!!!!!!!", current_user)
         person_dict = model_to_dict(person)
         return jsonify(data=person_dict, status={"code": 200, "message": "Success"})
     except models.DoesNotExist:

@@ -8,11 +8,17 @@ settings = Blueprint("settings", "settings")
 
 @settings.route('/', methods=['POST'])
 def create_new_setting():
-    payload = request.get_json()
-    payload['person_id'] = current_user.id
-    setting = models.PersonSetting.create(**payload)
-    setting_dict = model_to_dict(setting)
-    return jsonify(data=setting_dict, status={"code": 201, "message": "Successfully created settings for the user!"})
+    try:
+        print("!!!!!!!!!!!!!!CURRENT USER!!!!!!!!!!!!", current_user)
+        payload = request.get_json()
+        payload['person_id'] = current_user.id
+        setting = models.PersonSetting.create(**payload)
+        setting_dict = model_to_dict(setting)
+        print("!!!!!!!!!!!!!!TRYING TO SAVE SETTINGS!!!!!!!!!!!!", setting_dict)
+        return jsonify(data=setting_dict, status={"code": 201, "message": "Successfully created settings for the user!"})
+    except models.DoesNotExist:
+        return jsonify(data={current_user},
+                        status={"code": 401, "message": "Unable to save settings for user"})
 
 
 @settings.route('/', methods=["GET"])
@@ -33,7 +39,6 @@ def get_settings():
 @settings.route('/update', methods=["PUT"])
 @login_required
 def update_settings():
-
     try:
         setting = models.PersonSetting.get_by_id(1) \
             .join_from(models.PersonSetting, models.Person) \
