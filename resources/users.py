@@ -65,10 +65,13 @@ def login():
 def get_user():
     try:
         print('DO WE HAVE A CURRENT USER AT ALL??', current_user)
-        person = models.Person.get_by_id(current_user.id)
-        person_dict = model_to_dict(person)
-        print('TRYING TO FIND THE USER, what the fuck is going on', person_dict)
-        return jsonify(data=person_dict, status={"code": 200, "message": "Success"})
+        # person = models.Person.get_by_id(current_user.id)
+        # person_dict = model_to_dict(person)
+        person = [model_to_dict(person) for person in \
+                models.Person.select() \
+                .where(models.Person.id == current_user.id)]
+        print('TRYING TO FIND THE USER, what the fuck is going on', person)
+        return jsonify(data=person, status={"code": 200, "message": "Success"})
     except models.DoesNotExist:
         return jsonify(data={},
                        status={"code": 401, "message": "Error getting the user info."})
