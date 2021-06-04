@@ -25,9 +25,12 @@ def register():
         payload['password'] = generate_password_hash(payload['password'])
         user = models.Person.create(**payload)
         user_dict = model_to_dict(user)
+        print("DO WE HAVE A USER HERE??????", user_dict)
         del user_dict['password']  # Don't expose password!
         login_user(user=user, remember=True)
+        print("USER LOGGED IN?????", user)
         session['logged_in'] = True
+        print("SESSION LOGGED IN?????", session['logged_in'])
         return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered user"})
 
 
