@@ -25,12 +25,9 @@ def register():
         payload['password'] = generate_password_hash(payload['password'])
         user = models.Person.create(**payload)
         user_dict = model_to_dict(user)
-        print("DO WE HAVE A USER HERE??????", user_dict)
         del user_dict['password']  # Don't expose password!
         login_user(user=user, remember=True)
-        print("USER LOGGED IN?????", current_user)
         session['logged_in'] = True
-        print("SESSION LOGGED IN?????", session['logged_in'])
         return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered user"})
 
 
@@ -64,13 +61,11 @@ def login():
 @users.route('/', methods=["GET"])
 def get_user():
     try:
-        print('DO WE HAVE A CURRENT USER AT ALL??', current_user)
         # person = models.Person.get_by_id(current_user.id)
         # person_dict = model_to_dict(person)
         person = [model_to_dict(person) for person in \
                 models.Person.select() \
                 .where(models.Person.id == current_user.id)]
-        print('TRYING TO FIND THE USER, what the fuck is going on', person)
         return jsonify(data=person, status={"code": 200, "message": "Success"})
     except models.DoesNotExist:
         return jsonify(data={},
