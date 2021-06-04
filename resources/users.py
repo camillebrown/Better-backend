@@ -28,7 +28,7 @@ def register():
         print("DO WE HAVE A USER HERE??????", user_dict)
         del user_dict['password']  # Don't expose password!
         login_user(user=user, remember=True)
-        print("USER LOGGED IN?????", user)
+        print("USER LOGGED IN?????", current_user)
         session['logged_in'] = True
         print("SESSION LOGGED IN?????", session['logged_in'])
         return jsonify(data=user_dict, status={"code": 201, "message": "Successfully registered user"})
