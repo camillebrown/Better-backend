@@ -64,8 +64,10 @@ def login():
 @users.route('/', methods=["GET"])
 def get_user():
     try:
+        print('DO WE HAVE A CURRENT USER AT ALL??', current_user)
         person = models.Person.get_by_id(current_user.id)
         person_dict = model_to_dict(person)
+        print('TRYING TO FIND THE USER, what the fuck is going on', person_dict)
         return jsonify(data=person_dict, status={"code": 200, "message": "Success"})
     except models.DoesNotExist:
         return jsonify(data={},
