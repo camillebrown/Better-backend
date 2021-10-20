@@ -63,7 +63,9 @@ app.register_blueprint(moods, url_prefix='/moods')
 app.register_blueprint(sleeps, url_prefix='/sleeps')
 app.register_blueprint(meals, url_prefix='/meals')
 app.register_blueprint(settings, url_prefix='/profile')
-CORS(users)
+CORS(users,\
+     origins=['http://localhost:3000', 'http://better-you-app.herokuapp.com', 'http://get-better-app.herokuapp.com/'],\
+     supports_credentials=True))
 CORS(workouts)
 CORS(moods)
 CORS(sleeps)
