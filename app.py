@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify, g, session, make_response
 from flask_session import Session
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask_login import LoginManager
 from flask.sessions import SecureCookieSessionInterface
 from playhouse.db_url import connect
-import os
+import os 
 import models
 from resources.users import users
 from resources.workouts import workouts
@@ -13,16 +13,15 @@ from resources.sleeps import sleeps
 from resources.meals import meals
 from resources.settings import settings
 
+from datetime import timedelta
+
 # instantiate the app
 app = Flask(__name__)
+app.config.from_pyfile('config.py')
 
 # create our session secret key
 app.config['SECRET_KEY']=(os.environ.get('SECRET_KEY'))
 app.config['CORS_HEADERS'] = 'Content-Type'
-app.config.from_pyfile('config.py')
-
-# # create our session secret key
-# app.config['SECRET_KEY']=(os.environ.get('SECRET_KEY'))
 
 login_manager = LoginManager() # in JS -- const loginManager = new LoginManager()
 login_manager.init_app(app) # initialize the new LoginManager instance in our app
@@ -43,7 +42,7 @@ def before_request():
 @app.after_request
 def after_request(response):
     app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
-    response.headers.add("Set-Cookie", f"my_cookie='a cookie'; Secure; SameSite=None;")
+    response.headers.add("Set-Cookie", "my_cookie='a cookie'; Secure; SameSite=None;")
     g.db = models.DATABASE
     g.db.close()
     return response
@@ -55,7 +54,7 @@ def hello_world():
     return 'hello this flask app is working'
 
 CORS(app,\
-     origins=['http://localhost:3000', 'https://better-you-app.herokuapp.com', 'https://get-better-app.herokuapp.com/'],\
+     origins=['http://localhost:3000', 'http://better-you-app.herokuapp.com', 'http://get-better-app.herokuapp.com/'],\
      supports_credentials=True)
 
 app.register_blueprint(users, url_prefix='/api/v1/users')

@@ -18,10 +18,7 @@ class Person(UserMixin, BaseModel):
     last_name = CharField()
     username = CharField(unique=True)
     email = CharField(unique=True)
-    password = CharField()
-
-    # class Meta:
-    #     database = DATABASE       
+    password = CharField()  
     
 class PersonSetting(BaseModel):
     ACTIVE_STATUSES = (
@@ -85,9 +82,6 @@ class Mood(BaseModel):
     def get_rating(self):
         return dict(self.RATINGS)[self.rating]
 
-    # class Meta:
-    #     database = DATABASE
-
 class Meal(BaseModel):
     person = ForeignKeyField(Person, backref='meals')
     meal_name = CharField()
@@ -98,9 +92,6 @@ class Meal(BaseModel):
     created_at = DateTimeField(
         default=datetime.now
     )
-
-    # class Meta:
-    #     database = DATABASE
 
 class Sleep(BaseModel):
     person = ForeignKeyField(Person, backref='sleeps')
@@ -116,9 +107,6 @@ class Sleep(BaseModel):
         formats='%H:%M',
         default=datetime.now
     )
-
-    # class Meta:
-    #     database = DATABASE
 
 def initialize():
     DATABASE.connect()

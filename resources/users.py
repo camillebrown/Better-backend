@@ -2,7 +2,8 @@ import models
 
 from flask import Blueprint, jsonify, request, session, g
 from flask_bcrypt import generate_password_hash, check_password_hash
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, current_user, login_required
+from flask.sessions import SecureCookieSessionInterface
 from playhouse.shortcuts import model_to_dict
 
 
@@ -24,6 +25,7 @@ def register():
         # if the user does not already exist... create a user
         payload['password'] = generate_password_hash(payload['password'])
         user = models.Person.create(**payload)
+        print(user)
         user_dict = model_to_dict(user)
         del user_dict['password']  # Don't expose password!
         login_user(user=user, remember=True)
